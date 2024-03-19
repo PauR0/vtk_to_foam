@@ -3,10 +3,12 @@ import sys
 
 import pyvista as pv
 
+from utils import change_cell_orientation
 from mesh_to_foam import mesh_to_blockmeshdict
 
 
 cyl = pv.CylinderStructured(radius=[1.0, .9, .8, .7], height=5, direction=[0.0,0.0,1.0]).cast_to_unstructured_grid()
+cyl = change_cell_orientation(cyl) #We need to change orientation for OpenFOAM compatibility.
 #cyl.plot()
 cyl_boundary = cyl.extract_surface()
 
