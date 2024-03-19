@@ -15,6 +15,46 @@ from scipy.spatial.transform import Rotation
 path = os.path.realpath(__file__)
 template_dir = os.path.join(os.path.dirname(path), 'template_case')
 
+def change_cell_orientation(hexmesh, inplace=False):
+    """
+    This function changes the cell orientaion of a hexahedral mesh for
+    openFOAM compatibility.
+
+
+    Arguments:
+    -------------
+
+        hexmesh : pv.UnstructuredGrid
+            The hexahedral mesh.
+
+        inplace : bool, opt.
+            Whether to change the cell orientation in the passed object
+            or on a copy of it.
+
+    Returns:
+    ---------
+        hexmesh : pv.UnstructuredGrid
+            The reversely oriented hex mesh.
+    """
+
+    if not inplace:
+        hexmesh = hexmesh.copy(deep=True)
+
+    ct = np.unique(list(hexmesh.cells_dict.keys()))
+    if (len(ct) != 1) or (pv.CellType.HEXAHEDRON not in ct):
+        print("ERROR: Can't change cell orientation on non-hexahedral meshes. " +\
+              f"The passed mesh has as celltypes {ct}")
+        return None
+
+    hexes = hexmesh.cells_dict[pv.CellType.HEXAHEDRON]
+    hexes[:,[0, 1, 2, 3]] = hexes[:, [1, 0, 3, 2]]
+    hexes[:,[4, 5, 6, 7]] = hexes[:, [5, 4, 7, 6]]
+
+    off = np.full((hexes.shape[0], 1), fill_value=8, dtype=int)
+    cells = np.hstack((off, hexes))
+    hexmesh.cells = cells.ravel().astype(int)
+    return hexmesh
+#
 
 def normalize(v, o=2):
     """
