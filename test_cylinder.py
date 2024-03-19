@@ -15,10 +15,10 @@ cyl_boundary = cyl.extract_surface()
 boundary = pv.MultiBlock()
 #Let's define some patches! The last extract_surface ensures all the patches are PolyDatas
 ids = cyl_boundary.points[:, 2] > 2.4 #Top lid
-boundary['top lid'] = cyl_boundary.extract_points(ids, adjacent_cells=False, include_cells=True).extract_surface()
+boundary['top_lid'] = cyl_boundary.extract_points(ids, adjacent_cells=False, include_cells=True).extract_surface()
 
 ids = cyl_boundary.points[:, 2] < -2.4 #Bottom lid
-boundary['bottom lid'] = cyl_boundary.extract_points(ids, adjacent_cells=False, include_cells=True).extract_surface()
+boundary['bottom_lid'] = cyl_boundary.extract_points(ids, adjacent_cells=False, include_cells=True).extract_surface()
 
 ids = (cyl_boundary.points[:, 2] > -2.4) & (cyl_boundary.points[:, 2] < 2.4) #Wall
 boundary['wall'] = cyl_boundary.extract_points(ids, adjacent_cells=True, include_cells=True).extract_surface()
