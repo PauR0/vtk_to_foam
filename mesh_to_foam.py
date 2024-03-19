@@ -5,7 +5,6 @@ import argparse
 import pyvista as pv
 
 from utils import (template_dir,
-                   handle_path,
                    make_vertices_for_blockmesh,
                    make_blocks_for_blockmesh,
                    make_patches_for_block_mesh,
