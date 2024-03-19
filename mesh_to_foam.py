@@ -92,7 +92,6 @@ if __name__ == '__main__':
                         the current directory is used.""")
 
     parser.add_argument('mesh',
-                    nargs=1,
                     type=str,
                     help = """The path to the vtk MultiBlock mesh.""")
 
