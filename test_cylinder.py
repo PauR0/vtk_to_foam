@@ -1,4 +1,6 @@
 
+import sys
+
 import pyvista as pv
 
 from mesh_to_foam import mesh_to_blockmeshdict
@@ -23,17 +25,20 @@ mesh = pv.MultiBlock()
 mesh['internalMesh'] = cyl
 mesh['boundary'] = boundary
 
-#Let's visualize what we just built!
-p = pv.Plotter(shape=(1, 2))
-p.subplot(0, 0)
-p.add_mesh(mesh['internalMesh'], color='w', show_edges=True)
-p.show_bounds()
-p.subplot(0, 1)
-p.add_mesh(mesh['boundary'], multi_colors=True)
-
-p.add_axes()
-p.link_views()
-p.show()
+if len(sys.argv) > 1:
+    if sys.argv[1].lower() in ['--save', '-s']:
+        mesh.save('cylinder.vtm')
+else:
+    #Let's visualize what we just built!
+    p = pv.Plotter(shape=(1, 2))
+    p.subplot(0, 0)
+    p.add_mesh(mesh['internalMesh'], color='w', show_edges=True)
+    p.show_bounds()
+    p.subplot(0, 1)
+    p.add_mesh(mesh['boundary'], multi_colors=True)
+    p.add_axes()
+    p.link_views()
+    p.show()
 
 bmd = mesh_to_blockmeshdict(mesh)
 
